@@ -1,0 +1,54 @@
+--Calculate total patient count from year 2015-2023
+
+select count(distinct patient) as total_patient_count
+from encounters
+
+--Calculate total immunization for year 2022
+
+select count(code) as immunization_count
+from immunizations
+where date between '2022-01-01' and '2022-12-31'
+
+--Calculate distinct condition for year 2019
+
+select count(distinct code) as distinct_condition
+from conditions
+where start between '2019-01-01' and '2019-12-31'
+
+--Calculate no of encounters of each month for year 2020
+
+select month_name,
+count(id)
+from encounters as e
+inner join dimdate as d
+on e.start=d.dateid
+where e.start between '2020-01-01' and '2020-12-31'
+group by month_name
+order by 2 desc
+
+--Mention patient full name with no immunization
+
+select concat(first ||' '||last) as full_name
+from immunizations as i
+right join patients as p
+on i.patient=p.id
+where i.patient is null
+order by 1 asc
+
+--Calculate encounterclass for year 2023
+
+select encounterclass,
+count(*)
+from encounters
+where start between '2023-01-01' and '2023-12-31'
+group by encounterclass
+order by 2 desc
+
+--Mention top 5 conditions from 2015-2023
+
+select description,
+count(*)
+from conditions
+group by description
+order by 2 desc
+limit 5
