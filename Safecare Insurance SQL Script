@@ -1,0 +1,51 @@
+--Calculate total adjustment of Pioneer Clinic
+
+select round(sum(abs(adjustment))) as total_adjustment
+from facttable
+inner join dimlocation
+on facttable.dimlocationpk=dimlocation.dimlocationpk
+where dimlocation.locationname='Pioneer Clinic'
+
+--Mention  facility which has maximum charges
+
+select locationname,
+sum(abs(grosscharge)) as max_grosscharge
+from facttable
+inner join dimlocation
+on facttable.dimlocationpk=dimlocation.dimlocationpk
+group by locationname 
+order by 2 desc
+limit 1
+
+--Calculate total AR of Genesis Hospital Center
+
+select round(sum(abs(ar))) as total_ar
+from facttable
+inner join dimlocation
+on facttable.dimlocationpk=dimlocation.dimlocationpk
+where dimlocation.locationname='Genesis Hospital Center'
+
+--Mention facility which has minimum payment
+
+select locationname,
+sum(abs(payment)) as min_payment
+from facttable
+inner join dimlocation
+on facttable.dimlocationpk=dimlocation.dimlocationpk
+group by locationname 
+order by 2 asc
+limit 1
+
+--Calculate % claim paid of Principal Medical Clinic
+
+select sum(abs(payment))/sum(abs(grosscharge))*100 as claim_percent
+from facttable
+inner join dimlocation
+on facttable.dimlocationpk=dimlocation.dimlocationpk
+where locationname='Principal Medical Clinic'
+
+
+
+
+
+
